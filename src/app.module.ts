@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TasksModule } from './tasks/tasks.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { TasksModule } from './tasks/tasks.module';
       password: 'postgres',
       autoLoadEntities: true,
       synchronize: true, 
-    })
+    }), 
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
