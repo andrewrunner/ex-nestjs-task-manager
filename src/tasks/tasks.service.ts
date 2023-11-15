@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/auth/user.entity';
 import { DeleteResult } from 'typeorm';
@@ -10,6 +10,8 @@ import { TaskRepository } from './tasks.repository';
 
 @Injectable()
 export class TasksService {
+
+  private logger = new Logger('TasksService');
 
   constructor(
     @InjectRepository(TaskRepository)
@@ -34,9 +36,12 @@ export class TasksService {
       })
     }
 
-
-
-    return await this.taskRepository.find();
+    try {
+      return await this.taskRepository.find();
+    } catch(e) {
+      this.logger.error(`Error get taskts by ${user.username}`, e);
+      throw new InternalServerErrorException()
+    }
   }
 
 
