@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/auth/user.entity';
+import { User } from '../../src/auth/user.entity';
 import { DeleteResult } from 'typeorm';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
@@ -20,28 +20,7 @@ export class TasksService {
 
 
   async getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]> {
-    const { status, search } = filterDto;
-
-    let query = this.taskRepository.createQueryBuilder('task');
-    
-    query.where({ user });
-
-    if (status) {
-      query.andWhere('task.status = :status', {status});
-    }
-
-    if (search) {
-      query.andWhere('(LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search))', {
-        search: `%${search}%`
-      })
-    }
-
-    try {
-      return await this.taskRepository.find();
-    } catch(e) {
-      this.logger.error(`Error get taskts by ${user.username}`, e);
-      throw new InternalServerErrorException()
-    }
+      return this.taskRepository.getTasks(filterDto, user);
   }
 
 

@@ -18,8 +18,8 @@ import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 import { Task } from './task.entity';
 import { DeleteResult } from 'typeorm';
 import { AuthGuard } from '@nestjs/passport';
-import { User } from 'src/auth/user.entity';
-import { GetAuthUser } from 'src/auth/get-auth-user.decorator';
+import { User } from '../../src/auth/user.entity';
+import { GetAuthUser } from '../../src/auth/get-auth-user.decorator';
 
 @Controller('tasks')
 @UseGuards(AuthGuard())
