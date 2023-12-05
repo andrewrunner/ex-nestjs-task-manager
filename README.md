@@ -6,7 +6,6 @@ Simple backend api for tasks mamanger app;
 - passport jwt and bcrypt
 - PostgreSQL 
 - TypeORM
-- GraphQL
 - jest
 - class-validator - DTO class fields validation
 - class-transformer - serilyze request to DTO object or class 
