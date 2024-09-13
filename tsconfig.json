@@ -16,6 +16,15 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+  },
+  // watchOptions section help fix problem with watch mode in docker container on windows
+  "watchOptions": {
+    "watchFile": "dynamicPriorityPolling",
+    "watchDirectory": "dynamicPriorityPolling",
+    "excludeDirectories": [
+      "**/node_modules",
+      "dist"
+    ]
   }
 }

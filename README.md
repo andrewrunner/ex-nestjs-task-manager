@@ -8,9 +8,9 @@ Simple backend api for tasks mamanger app;
 - TypeORM
 - jest
 - class-validator - DTO class fields validation
-- class-transformer - serilyze request to DTO object or class 
+- class-transformer - serialize request to DTO object or class 
 - hapi/joi - validate ENV file
-- cross-env (global) - use to schoose env file by cmd 'STAGE' param 
+- cross-env (global) - use to choose env file by cmd 'STAGE' param 
 
 ## Installation
 

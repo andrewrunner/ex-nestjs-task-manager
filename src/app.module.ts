@@ -1,25 +1,28 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
+import { configValidationSchema } from './config.schema';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+
 import { TasksModule } from './tasks/tasks.module';
 import { AuthModule } from './auth/auth.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { configValidationSchema } from './config.schema';
 
 @Module({
   imports: [
+
     ConfigModule.forRoot({ 
       envFilePath: [ `.env.stage.${process.env.STAGE}`, ], // загрузит соотв. .env файл из корня (параметр указывается в скрипте package.json)
       validationSchema: configValidationSchema // валидаия .env 
      }),
-    TasksModule, 
 
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => { // загрузка из файла (configService доступен благодаря imports и inject)
-        
+
+      useFactory: async (configService: ConfigService) => { 
+        // загрузка из файла (configService доступен благодаря imports и inject)
         return {
           type: 'postgres',
           autoLoadEntities: true,
@@ -33,6 +36,16 @@ import { configValidationSchema } from './config.schema';
       }
     }),
 
+    AuthModule,
+    TasksModule, 
+  ],
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule {}
+
+
+
     /*
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -45,9 +58,3 @@ import { configValidationSchema } from './config.schema';
       synchronize: true, 
     }), 
     */
-    AuthModule
-  ],
-  controllers: [AppController],
-  providers: [AppService],
-})
-export class AppModule {}

@@ -1,8 +1,10 @@
 import { ConflictException, Injectable, InternalServerErrorException } from "@nestjs/common";
-import { DataSource, EntityRepository, Repository } from "typeorm";
+import { DataSource, Repository } from "typeorm";
+import * as bcrypt from "bcrypt";
+
 import { AuthCredentialsDto } from "./dto/auth-cedentials.dto";
 import { User } from "./user.entity";
-import * as bcrypt from "bcrypt";
+
 
 @Injectable()
 export class UsersRepository extends Repository<User> {

@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+
+  life-organizer-server:
+    container_name: life-organizer-server
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - './:/app:rw'
+      - '/app/node_modules/'
+    depends_on:
+      - life-organizer-db
+    networks:
+      - life-organizer-network
+
+  life-organizer-db:
+    container_name: life-organizer-db
+    image: 'postgres:16-alpine'
+    environment:
+      - POSTGRES_DB=life_organizer
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - life-organizer-volume:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    networks:
+      - life-organizer-network
+    restart: unless-stopped
+
+
+  # Utility containers
+  # For example: docker-compose run --rm api-npm i -D @types/express
+  api-npm:
+    image: node:20.16.0-alpine
+    working_dir: /app
+    entrypoint: ['npm']
+    volumes:
+      - './:/app'
+  api-npx:
+    image: node:20.16.0-alpine
+    working_dir: /app
+    entrypoint: ['npx']
+    volumes:
+      - './:/app'
+
+
+
+volumes:
+  life-organizer-volume:
+    driver: local
+
+networks:
+ life-organizer-network:
+   driver: bridge

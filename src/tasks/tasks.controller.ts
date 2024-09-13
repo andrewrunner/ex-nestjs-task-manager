@@ -1,25 +1,14 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  NotFoundException,
-  Param,
-  Patch,
-  Post,
-  Query,
-  UseGuards,
-  Logger,
-} from '@nestjs/common';
+import {Body, Controller, Delete, Get, NotFoundException, Param, Patch, Post, Query, UseGuards, Logger} from '@nestjs/common';
+//import { DeleteResult } from 'typeorm';
+import { AuthGuard } from '@nestjs/passport';
+
+import { User } from 'src/auth/user.entity';
+import { GetAuthUser } from 'src/auth/get-auth-user.decorator';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 import { Task } from './task.entity';
-import { DeleteResult } from 'typeorm';
-import { AuthGuard } from '@nestjs/passport';
-import { User } from '../../src/auth/user.entity';
-import { GetAuthUser } from '../../src/auth/get-auth-user.decorator';
 
 @Controller('tasks')
 @UseGuards(AuthGuard())
@@ -64,7 +53,7 @@ export class TasksController {
     @GetAuthUser() user: User
   ): Promise<Task> {
 
-    let { status } = updateTaskStatusDto;
+    const { status } = updateTaskStatusDto;
     return this.tasksService.updateTaskStatus(id, status, user);
   }
 
@@ -74,7 +63,7 @@ export class TasksController {
     @Param('id') id: string,
     @GetAuthUser() user: User
   ): Promise<void> {
-    let count = await this.tasksService.deleteTask(id, user);
+    const count = await this.tasksService.deleteTask(id, user);
 
     if(!count) {
       throw new NotFoundException(`Task not found!`)
